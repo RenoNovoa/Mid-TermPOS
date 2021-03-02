@@ -84,6 +84,28 @@ namespace Mid_TermPOS
             };
             return output;
         }
+
+        public static void Cash(decimal cartTotal)
+        {
+            decimal tendered = 0;
+            do
+            {
+
+                Console.WriteLine("Your total is $" + cartTotal + ". How much cash is tendered?");
+                decimal.TryParse(Console.ReadLine(), out tendered);
+                if (tendered < cartTotal)
+                {
+                    Console.WriteLine("Inadequate funds, try again.");
+                }
+
+            }
+            while (tendered < cartTotal);
+
+
+            decimal change = tendered - cartTotal;
+            Console.WriteLine("Your change back is: $" + change);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
 }
 
