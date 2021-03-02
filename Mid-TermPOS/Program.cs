@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mid_TermPOS
 {
-    partial class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -24,7 +25,7 @@ namespace Mid_TermPOS
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\nWould you like to Add More Items? (y/n)");
-                
+
                 var userInput = Console.ReadLine();
                 if (userInput.Equals("Y", StringComparison.OrdinalIgnoreCase) || userInput.Equals("yes", StringComparison.OrdinalIgnoreCase))
                 {
@@ -56,7 +57,55 @@ namespace Mid_TermPOS
                 counter++;
             }
         }
-    }
 
+        public static List<Product> GetAllProducts()
+        {
+            List<Product> output = new List<Product>();
+
+            List<string> storeItems = TextFile.GetItems(filePath);
+
+            foreach (var merch in storeItems)
+            {
+                if (string.IsNullOrWhiteSpace(merch))
+                {
+                    continue;
+                }
+                string[] item = merch.Split(',');
+                Product products = new Product();
+
+                products.Name = item[0];
+                products.Category = item[1];
+                products.Description = item[2];
+                decimal.TryParse(item[3], out decimal PriceOfItems);
+                products.PriceOfItems = PriceOfItems;
+
+
+                output.Add(products);
+            };
+            return output;
+        }
+
+        public static void Cash(decimal cartTotal)
+        {
+            decimal tendered = 0;
+            do
+            {
+
+                Console.WriteLine("Your total is $" + cartTotal + ". How much cash is tendered?");
+                decimal.TryParse(Console.ReadLine(), out tendered);
+                if (tendered < cartTotal)
+                {
+                    Console.WriteLine("Inadequate funds, try again.");
+                }
+
+            }
+            while (tendered < cartTotal);
+
+
+            decimal change = tendered - cartTotal;
+            Console.WriteLine("Your change back is: $" + change);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+    }
 }
 
