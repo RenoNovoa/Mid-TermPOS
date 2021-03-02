@@ -1,37 +1,89 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mid_TermPOS
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            public static List<Product> GetAllProducts()
+            Console.WriteLine("Welcome to Our Store!");
+            do
             {
-                List<Product> output = new List<Product>();
+                DisplayProducts();
+                Console.WriteLine();
+                Shopping.GoShopping();
 
-                List<string> storeItems = TextFile.GetItems(filePath);
+            } while (ContinueAddingProducts());
+            Shopping.CheckoutCartForUser();
+            Console.ReadKey();
+        }
 
-                foreach (var merch in storeItems)
+        public static bool ContinueAddingProducts()
+        {
+            do
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\nWould you like to Add More Items? (y/n)");
+
+                var userInput = Console.ReadLine();
+                if (userInput.Equals("Y", StringComparison.OrdinalIgnoreCase) || userInput.Equals("yes", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (string.IsNullOrWhiteSpace(merch))
-                    {
-                        continue;
-                    }
-                    string[] item = merch.Split(',');
-                    Product products = new Product();
+                    return true;
+                }
+                else if (userInput.Equals("N", StringComparison.OrdinalIgnoreCase) || userInput.Equals("no", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Please enter a valid Response ");
+                }
 
-                    products.Name = item[0];
-                    products.Category = item[1];
-                    products.Description = item[2];
-                    decimal.TryParse(item[3], out decimal PriceOfItems);
-                    products.PriceOfItems = PriceOfItems;
+            } while (true);
+        }
 
+        private static void DisplayProducts()
+        {
+            var products = TextFile.GetAllProducts();
 
-                    output.Add(products);
-                };
-                return output;
+            int counter = 1;
+
+            foreach (var product in products)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine($"{counter}. { product.Category }, { product.Name }, { product.Description }, { product.PriceOfItems }");
+                counter++;
             }
+        }
+
+        public static List<Product> GetAllProducts()
+        {
+            List<Product> output = new List<Product>();
+
+            List<string> storeItems = TextFile.GetItems(filePath);
+
+            foreach (var merch in storeItems)
+            {
+                if (string.IsNullOrWhiteSpace(merch))
+                {
+                    continue;
+                }
+                string[] item = merch.Split(',');
+                Product products = new Product();
+
+                products.Name = item[0];
+                products.Category = item[1];
+                products.Description = item[2];
+                decimal.TryParse(item[3], out decimal PriceOfItems);
+                products.PriceOfItems = PriceOfItems;
+
+
+                output.Add(products);
+            };
+            return output;
         }
     }
 }
+
