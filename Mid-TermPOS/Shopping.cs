@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace workingPOS
+namespace Mid_TermPOS
 {
     partial class Program
     {

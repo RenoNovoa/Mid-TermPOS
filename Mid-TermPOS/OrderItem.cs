@@ -1,4 +1,4 @@
-﻿namespace workingPOS
+﻿namespace Mid_TermPOS
 {
     public class OrderItem 
     {

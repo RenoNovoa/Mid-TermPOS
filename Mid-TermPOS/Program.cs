@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace workingPOS
+namespace Mid_TermPOS
 {
     partial class Program
     {

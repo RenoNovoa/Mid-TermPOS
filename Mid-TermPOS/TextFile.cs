@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace workingPOS
+namespace Mid_TermPOS
 {
     public class TextFile
     {
