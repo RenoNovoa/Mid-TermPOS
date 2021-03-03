@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Mid_TermPOS
 {
     public class Shopping
     {
-        //public double Total { get; set; }
-
+        private static double total = 0;
         public static List<OrderItem> ShoppingCart { get; set; } = new List<OrderItem>();
 
         public static void GoShopping()
@@ -15,8 +15,8 @@ namespace Mid_TermPOS
             var productList = TextFile.GetAllProducts();
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Please Select a  product from the list, to add to your shoping cart" +
-              "Enter number of the product");
+            Console.WriteLine("Select a  product from the list, to add to your Spacecraft shopping cart" );
+            Console.Write("\n\rPlease Enter Number Of The Product:  ");
             var userSelection = int.Parse(Console.ReadLine());
 
             var item = productList[userSelection - 1];
@@ -28,85 +28,117 @@ namespace Mid_TermPOS
 
             OrderItem orderItem = new OrderItem(item, userAmountSelection, itemTotal);
 
-            //if (do you want to add this to cart?)
-            //{
-            ShoppingCart.Add(orderItem);
-            //}
+           
+            ShoppingCart.Add(orderItem);          
 
 
-            Console.WriteLine($"You have Selected {userAmountSelection} {item.Name} totaling : $ {orderItem.ItemTotal}  ");
+            Console.WriteLine($"You have Selected {userAmountSelection} {item.Name} Totaling : $ {orderItem.ItemTotal}  ");
 
-            DisplayRunningTotal(ShoppingCart);
-            //Receipt.PrintTotal(ShoppingCart);
-
-            //ShoppingCart.Add(new OrderItem());
-            //var userSelection = Console.ReadLine();
+            DisplayRunningTotal();
+           
         }
+
         public static string CheckoutCartForUser()
         {
-            //bool isPaymentCorrect = false;
             bool StillLooping = true;
             string paymentImput;
-
 
             do
             {
                 Console.WriteLine(" How would you like to pay \n1.Cash  \n2.Credit \n3.Check ");
-                Console.Write("Enter a Num Option here: ");
+                Console.Write("\n\rEnter a Number Option here: ");
+
                 paymentImput = Console.ReadLine();
-                Console.WriteLine();
-                //--------------------------------------------------------------
+
+                
                 while (paymentImput != "1" && paymentImput != "2" && paymentImput != "3")
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Sorry, " + paymentImput + " is not an option. \nHow would ypu like to pay \n1.Cash  \n2.Credit \n3.Check");
                     paymentImput = Console.ReadLine();
                 }
-                //-------------------------------------------------------------
+
                 if (paymentImput.Equals("1", StringComparison.OrdinalIgnoreCase))
                 {
                     StillLooping = false;
-                    Console.WriteLine("\nPlease Enter the Amount of Cash you will be paying with");
+                    Console.WriteLine("\nPlease Enter the Amount of Cash you will be paying with: ");
 
-                    //You can validate in this later 
+                    GenerateReceiptCash(total);
+                    
                 }
                 else if (paymentImput.Equals("2", StringComparison.OrdinalIgnoreCase))
                 {
                     StillLooping = false;
+
                     Console.WriteLine("\nPlease Enter Your Card Number:");
+                    Console.WriteLine("The card Number must have 16 Digits " +
+                        "Ex" + "(1234568912365421\n\r)");
+
                     var userCardNumber = Console.ReadLine();
-                    //---------------------------------------------------------
                     while (userCardNumber.Length != 16)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Sorry, " + userCardNumber + " is not 16 numbers. \nWhat is your card number?");
                         userCardNumber = Console.ReadLine();
                     }
-                    //---------------------------------------------------------
+
                     Console.WriteLine("\nPlease Enter the Expiration Date of your card (MMYY)");
                     var userExpDate = Console.ReadLine();
-                    //--------------------------------------------------------
+
                     while (userExpDate.Length != 4)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Sorry, " + userExpDate + " is not 4 numbers. \nPlease Enter the Expiration Date of your card (MMYY)?");
                         userExpDate = Console.ReadLine();
                     }
-                    //--------------------------------------------------------
                     Console.WriteLine("\nPlease Enter the CVV of your credit card");
                     var userCW = Console.ReadLine();
+
                     while (userCW.Length != 3)
                     {
-                        Console.WriteLine("Sorry, " + userCW + " is not 3 numbers. \nPlease Enter the CVV of your credit card? ");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Sorry, " + userCW + " is not 3 numbers. \nPlease Enter the CVV of your credit card? Ex. 123");
                         userCW = Console.ReadLine();
                     }
+
+
+
                 }
                 else if (paymentImput.Equals("3", StringComparison.OrdinalIgnoreCase))
                 {
                     StillLooping = false;
-                    Console.WriteLine("Please enter your First name & Last Name " +
-                        " like in your ID please:");
-                    var FnameLname = Console.ReadLine();
-                    Console.WriteLine("\nPlease Enter the Check Number ");
-                    var userCheckNum = Console.ReadLine();
-                    //Lets find ways to validate here a check later buddy 
+                    Console.WriteLine("\n\rPlease Enter Your Routing Number ");
+                    Console.WriteLine("Routing Must have 9 DIgits:");
+                    var userRouting = Console.ReadLine();
+
+                    while (userRouting.Length != 9)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Sorry, " + userRouting + " is not 9 Digits. \n\rPlease Enter Your Routing Number ");
+                        userRouting = Console.ReadLine();
+                    }
+
+                    Console.WriteLine("\nPlease Enter the Account Number ");
+                    var userAccountNum = Console.ReadLine();
+
+                    while (userAccountNum.Length != 10)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Sorry, " + userAccountNum + " is not 10 Digits. \n\rPlease Enter the Account NUmber ");
+                        userAccountNum = Console.ReadLine();
+                    }
+
+                    Console.WriteLine("\n\rPlease Enter Your Check Number ");
+                    var userCheckNUm = Console.ReadLine();
+
+                    while (userCheckNUm.Length != 4)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Sorry, " + userCheckNUm + " is not 4 Digits. \n\rPlease Enter Your Check Number ");
+                        userCheckNUm = Console.ReadLine();
+                    }
+                    // Call Check Receipt
+                    GenerateReceiptCheck(userCheckNUm);
                 }
                 else
                 {
@@ -120,13 +152,13 @@ namespace Mid_TermPOS
 
 
             return paymentImput;
+            
         }
 
-        public static void DisplayRunningTotal(List<OrderItem> shoppingCart)
-        {
-            var total = 0.00;
+        public static void DisplayRunningTotal()
+        {          
 
-            foreach (var lineItem in shoppingCart)
+            foreach (var lineItem in ShoppingCart)
             {
                 total += lineItem.ItemTotal;
             }
@@ -134,19 +166,91 @@ namespace Mid_TermPOS
             Console.WriteLine("Your current total is: " + total.ToString("C2"));
         }
 
-        public static void GenerateReceiptForUser()//List<Product> ShoppingCart 
+        public static void GenerateReceiptCash(double cartTotal)
         {
-            //var total = 0;
-            //var taxRate = 0.06;
+            ReceiptHeader();
 
-            //ShoppingCart
+            ReceiptBody();
+
+            Console.WriteLine("How much are paying?");
+            double cashTendered = double.Parse(Console.ReadLine());
+            while(cashTendered < cartTotal)
+            {
+
+            }
+
+            Console.WriteLine("Your change backis ....");
+
+            ReceiptFooter(cartTotal);
         }
-        //This is the method we creat if we want to Remove stuff from the list 
+
+        public static void GenerateReceiptCredit(double cartTotal, string cardNumber)
+        {
+            ReceiptHeader();
+
+            ReceiptBody();
+
+            Console.WriteLine($"Card number {cardNumber}: was charged {cartTotal * 1.06} ");
+
+            ReceiptFooter(cartTotal);
+        }
+        public static void GenerateReceiptCheck(string checkNumber)
+        {
+            ReceiptHeader();
+
+            ReceiptBody();
+
+            Console.WriteLine($"Check number {checkNumber}: was charged  ");
+
+            ReceiptFooter(total);
+        }
+
+        public static string HideCardNumber(string credit)
+        {
+            StringBuilder sb = new StringBuilder("XXXX-XXXX-XXXX-");
+            for (int i = 12; i < credit.Length; i++)
+            {
+                sb.Append(credit[i]);
+            }
+
+            return sb.ToString();
+        }
+
+        private static void ReceiptFooter(double total)
+        { 
+            var taxRate = 0.06;
+            var taxTotal = (taxRate * total);
+            var granTotal = (taxTotal + total);
+            Console.WriteLine("\nYour Sub Total is :" + total.ToString("C2"));
+            Console.WriteLine("\nYour Tax total is :" + taxTotal.ToString("C2"));
+            Console.WriteLine("\nYour Final Total is :" + granTotal.ToString("C2"));
+        }
+
+        private static void ReceiptBody()
+        {
+            foreach (var product in ShoppingCart)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"{product.Quantity} {product.Item.Name}-----${product.Item.PriceOfItems * product.Quantity}");
+            }
+        }
+
+        public static void ReceiptHeader()
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("\n\r\n\rThank for shopping with us.");
+            Console.WriteLine("Register:Danny Novoa.");
+            Console.WriteLine($"Date: {DateTime.Now.ToShortDateString()}");
+            Console.WriteLine("\n\r\n\rOrder Description: ");
+        }
+
+
+        //This is the method we creat if we want to Remove stuff from the list
         //public static void ModifyShoppingCart()
         //{
         //    Console.WriteLine("Which item would you like to modify?");
         //    //Display All Items in Cart...
-        //    int itemIndex = int.Parse(Console.ReadLine()) -1;
+        //    int itemIndex = int.Parse(Console.ReadLine()) - 1;
 
         //    var item = ShoppingCart[itemIndex];
 
@@ -155,7 +259,7 @@ namespace Mid_TermPOS
 
         //    item.Quantity = int.Parse(Console.ReadLine());
 
-        //    if(item.Quantity <= 0)
+        //    if (item.Quantity <= 0)
         //    {
 
         //    }

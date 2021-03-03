@@ -46,12 +46,4 @@ namespace Mid_TermPOS
     }
         
 }
- //
-//check if there is an empty space
-//foreach (var item in storeItems)
-//{
-//    if(!string.IsNullOrWhiteSpace(item))
-//    {
-//        output.Add(item);
-//    }
-//}
+ 
