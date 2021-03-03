@@ -5,9 +5,15 @@ namespace Mid_TermPOS
 {
     public class Program
     {
+
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Our Store!");
+
+            //Console.WriteLine( Shopping.HideCardNumber("1234567890123456"));
+
+
+            Console.WriteLine("WELCOME TO << THE SPUTNIK 1 >> STORE!");
             do
             {
                 DisplayProducts();
@@ -17,7 +23,7 @@ namespace Mid_TermPOS
             } while (ContinueAddingProducts());
             Shopping.CheckoutCartForUser();
             Console.ReadKey();
-        }
+        }       
 
         public static bool ContinueAddingProducts()
         {
@@ -62,7 +68,7 @@ namespace Mid_TermPOS
         {
             List<Product> output = new List<Product>();
 
-            List<string> storeItems = TextFile.GetItems(filePath);
+            List<string> storeItems = TextFile.GetItems(TextFile.filePath);
 
             foreach (var merch in storeItems)
             {
@@ -76,7 +82,7 @@ namespace Mid_TermPOS
                 products.Name = item[0];
                 products.Category = item[1];
                 products.Description = item[2];
-                decimal.TryParse(item[3], out decimal PriceOfItems);
+                double.TryParse(item[3], out double PriceOfItems);
                 products.PriceOfItems = PriceOfItems;
 
 
